@@ -553,9 +553,28 @@
     };
   }
 
+  // Normalize entry data coming back from Google Sheets
+  // date may be a Date object, hours may be a JSON string
+  function normalizeEntry(e) {
+    // Fix date: convert Date object to YYYY-MM-DD string
+    if (e.date && typeof e.date !== 'string') {
+      const d = new Date(e.date);
+      e.date = d.toISOString().split('T')[0];
+    }
+    // Fix hours: parse if it's still a JSON string
+    if (e.hours && typeof e.hours === 'string') {
+      try { e.hours = JSON.parse(e.hours); } catch { e.hours = null; }
+    }
+    return e;
+  }
+
   function render() {
     const list = document.getElementById('entry-list');
     const { start, end } = getMonthRange();
+
+    // Normalize all entries before rendering
+    entries = entries.map(normalizeEntry);
+
     const thisMonth = entries.filter(e => { const d = new Date(e.date + 'T12:00:00'); return d >= start && d <= end; });
     const totalH = thisMonth.reduce((s, e) => s + (e.hours?.decimal || 0), 0);
 
