@@ -350,14 +350,6 @@
 
   <div class="container">
 
-    <!-- Setup Banner -->
-    <div class="setup-banner" id="setup-banner">
-      <strong>⚙️ One-time Setup Required</strong>
-      Paste your Google Apps Script Web App URL below to connect to Google Sheets.
-      <input type="text" id="script-url-input" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
-      <button onclick="saveScriptUrl()">Connect to Google Sheets ✓</button>
-    </div>
-
     <!-- Status -->
     <div class="status-pill loading" id="status-pill">
       <div class="status-dot"></div>
@@ -413,8 +405,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL_KEY = 'worklog_script_url';
-  let scriptUrl = localStorage.getItem(SCRIPT_URL_KEY) || '';
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbx4s4Rp15B0l4Q2Q9SJLKsOSN6m7jnNoJtUrfAMbvoszEV9ahkVbKQIB-oRZnBVYOWxrw/exec';
   let entries = [];
   let selectedLocation = 'office';
 
@@ -426,12 +417,6 @@
     const password = input.value.trim();
 
     if (!password) { errEl.textContent = 'Please enter a password.'; return; }
-    if (!scriptUrl) {
-      // No script URL yet — unlock and let user set it up
-      showApp();
-      return;
-    }
-
     btn.disabled = true;
     btn.textContent = 'Checking...';
     errEl.textContent = '';
@@ -487,22 +472,6 @@
     document.getElementById('month-name').textContent = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
     document.getElementById('week-label').textContent = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 
-    if (scriptUrl) {
-      document.getElementById('setup-banner').style.display = 'none';
-      setStatus('loading', 'Connecting...');
-      loadEntries();
-    } else {
-      document.getElementById('loading-msg').textContent = 'Connect to Google Sheets above to get started.';
-      setStatus('disconnected', 'Not connected');
-    }
-  }
-
-  function saveScriptUrl() {
-    const val = document.getElementById('script-url-input').value.trim();
-    if (!val.startsWith('https://script.google.com')) { alert('Please enter a valid Google Apps Script URL.'); return; }
-    scriptUrl = val;
-    localStorage.setItem(SCRIPT_URL_KEY, scriptUrl);
-    document.getElementById('setup-banner').style.display = 'none';
     setStatus('loading', 'Connecting...');
     loadEntries();
   }
