@@ -17,7 +17,7 @@ A clean, minimal personal work tracker to log daily working hours, office/remote
 
 ## 🚀 Live Site
 
-🔗 [https://mohdsharib-work.github.io/worklog/]([https://mohdsharib-work.github.io/worklog/])
+🔗 [https://mohdsharib-work.github.io/worklog/](https://mohdsharib-work.github.io/worklog/)
 
 
 ---
