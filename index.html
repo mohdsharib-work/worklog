@@ -210,7 +210,16 @@
     margin-bottom: 1.5rem;
   }
 
-  .monthly-card h2 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .monthly-card h2 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
+  .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .nav-btn {
+    background: none; border: 1.5px solid var(--border); border-radius: 7px;
+    width: 28px; height: 28px; cursor: pointer; color: var(--muted);
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; line-height: 1;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 
@@ -358,7 +367,11 @@
 
     <!-- Monthly Summary -->
     <div class="monthly-card">
-      <h2>This Month — <span id="month-name"></span></h2>
+      <div class="month-nav">
+        <button class="nav-btn" onclick="changeMonth(-1)">&#8592;</button>
+        <h2>Analytics — <span id="month-name"></span></h2>
+        <button class="nav-btn" id="btn-next-month" onclick="changeMonth(1)">&#8594;</button>
+      </div>
       <div class="stats-row">
         <div class="stat"><div class="val" id="stat-days">0</div><div class="label">Days Logged</div></div>
         <div class="stat"><div class="val" id="stat-hours">0h</div><div class="label">Total Hours</div></div>
@@ -469,7 +482,7 @@
     document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('inp-start').value = '09:00';
     document.getElementById('inp-end').value = '17:00';
-    document.getElementById('month-name').textContent = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    updateMonthLabel();
     document.getElementById('week-label').textContent = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 
     setStatus('loading', 'Connecting...');
@@ -545,43 +558,94 @@
     } catch (err) { alert('Failed to delete.'); }
   }
 
+  // 0 = current month, -1 = last month, -2 = two months ago etc.
+  let viewMonthOffset = 0;
+
+  function changeMonth(dir) {
+    const now = new Date();
+    const newOffset = viewMonthOffset + dir;
+    // Don't go into the future
+    if (newOffset > 0) return;
+    viewMonthOffset = newOffset;
+    updateMonthLabel();
+    renderStats();
+  }
+
+  function updateMonthLabel() {
+    const now = new Date();
+    const d = new Date(now.getFullYear(), now.getMonth() + viewMonthOffset, 1);
+    document.getElementById('month-name').textContent = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    // Disable next button if we're on current month
+    document.getElementById('btn-next-month').disabled = viewMonthOffset === 0;
+  }
+
   function getMonthRange() {
     const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth() + viewMonthOffset;
     return {
-      start: new Date(now.getFullYear(), now.getMonth(), 1),
-      end: new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
+      start: new Date(y, m, 1),
+      end: new Date(y, m + 1, 0, 23, 59, 59)
     };
   }
 
   // Normalize entry data coming back from Google Sheets
-  // date may be a Date object, hours may be a JSON string
   function normalizeEntry(e) {
-    // Fix date: convert Date object to YYYY-MM-DD string
-    if (e.date && typeof e.date !== 'string') {
-      const d = new Date(e.date);
-      e.date = d.toISOString().split('T')[0];
+    // Fix date — handle ALL possible formats from Google Sheets
+    if (e.date) {
+      let d = null;
+      if (typeof e.date === 'string' && e.date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        // Already correct YYYY-MM-DD format
+        d = null; // no change needed
+      } else {
+        // Could be a Date object, or string like "2/28/2026", "28/02/2026", etc.
+        const parsed = new Date(e.date);
+        if (!isNaN(parsed.getTime())) {
+          // Format as YYYY-MM-DD using local date parts to avoid timezone shift
+          const yr = parsed.getFullYear();
+          const mo = String(parsed.getMonth() + 1).padStart(2, '0');
+          const dy = String(parsed.getDate()).padStart(2, '0');
+          e.date = yr + '-' + mo + '-' + dy;
+        }
+      }
     }
     // Fix hours: parse if it's still a JSON string
     if (e.hours && typeof e.hours === 'string') {
-      try { e.hours = JSON.parse(e.hours); } catch { e.hours = null; }
+      try { e.hours = JSON.parse(e.hours); } catch(err) { e.hours = null; }
+    }
+    // Fix start/end time — Google Sheets may return Date objects for time columns
+    if (e.start && typeof e.start !== 'string') {
+      const t = new Date(e.start);
+      if (!isNaN(t.getTime())) {
+        e.start = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+      } else { e.start = ''; }
+    }
+    if (e.end && typeof e.end !== 'string') {
+      const t = new Date(e.end);
+      if (!isNaN(t.getTime())) {
+        e.end = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+      } else { e.end = ''; }
     }
     return e;
   }
 
-  function render() {
-    const list = document.getElementById('entry-list');
+  function renderStats() {
     const { start, end } = getMonthRange();
-
-    // Normalize all entries before rendering
-    entries = entries.map(normalizeEntry);
-
     const thisMonth = entries.filter(e => { const d = new Date(e.date + 'T12:00:00'); return d >= start && d <= end; });
     const totalH = thisMonth.reduce((s, e) => s + (e.hours?.decimal || 0), 0);
-
     document.getElementById('stat-days').textContent = thisMonth.length;
     document.getElementById('stat-hours').textContent = totalH > 0 ? `${Math.round(totalH * 10) / 10}h` : '0h';
     document.getElementById('stat-office').textContent = thisMonth.filter(e => e.location === 'office').length;
     document.getElementById('stat-remote').textContent = thisMonth.filter(e => e.location === 'remote').length;
+  }
+
+  function render() {
+    const list = document.getElementById('entry-list');
+
+    // Normalize all entries before rendering
+    entries = entries.map(normalizeEntry);
+
+    renderStats();
 
     list.innerHTML = '';
     if (entries.length === 0) { list.innerHTML = '<div class="empty">No entries yet. Log your first day above!</div>'; return; }
