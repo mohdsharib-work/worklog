@@ -337,7 +337,17 @@
     <div class="lock-icon">🔒</div>
     <h1>Work Log</h1>
     <p class="subtitle">Mohd Sharib — Enter password to continue</p>
-    <input type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') unlock()">
+
+    <!-- Connection status on lock screen -->
+    <div id="lock-conn-status" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+      <div style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.72rem;padding:0.25rem 0.65rem;border-radius:20px;background:#f0f0f0;color:#888580;" id="lock-status-pill">
+        <div id="lock-status-dot" style="width:6px;height:6px;border-radius:50%;background:currentColor;"></div>
+        <span id="lock-status-text">Checking connection...</span>
+      </div>
+      <button onclick="retryConnection()" id="lock-retry-btn" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;">↻ Retry</button>
+    </div>
+
+    <input type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') unlock()" id="password-input">
     <button class="btn-unlock" id="btn-unlock" onclick="unlock()">Unlock</button>
     <div class="lock-error" id="lock-error"></div>
   </div>
@@ -360,9 +370,12 @@
   <div class="container">
 
     <!-- Status -->
-    <div class="status-pill loading" id="status-pill">
-      <div class="status-dot"></div>
-      <span id="status-text">Not connected</span>
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem;">
+      <div class="status-pill loading" id="status-pill" style="margin-bottom:0;">
+        <div class="status-dot"></div>
+        <span id="status-text">Connecting...</span>
+      </div>
+      <button onclick="loadEntries()" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;">↻ Retry</button>
     </div>
 
     <!-- Monthly Summary -->
@@ -421,6 +434,50 @@
   const scriptUrl = 'https://script.google.com/macros/s/AKfycbx4s4Rp15B0l4Q2Q9SJLKsOSN6m7jnNoJtUrfAMbvoszEV9ahkVbKQIB-oRZnBVYOWxrw/exec';
   let entries = [];
   let selectedLocation = 'office';
+
+  // ── LOCK SCREEN CONNECTION CHECK ─────────────
+  async function checkLockScreenConnection() {
+    setLockStatus('checking', 'Checking connection...');
+    try {
+      const res = await fetch(scriptUrl + '?action=getAll');
+      const data = await res.json();
+      if (data.entries !== undefined) {
+        setLockStatus('connected', 'Server connected ✓');
+        document.getElementById('btn-unlock').disabled = false;
+      } else {
+        setLockStatus('error', 'Server error — retry');
+      }
+    } catch(err) {
+      setLockStatus('error', 'Not connected — retry');
+    }
+  }
+
+  function setLockStatus(type, text) {
+    const pill = document.getElementById('lock-status-pill');
+    const dot = document.getElementById('lock-status-dot');
+    const span = document.getElementById('lock-status-text');
+    span.textContent = text;
+    if (type === 'connected') {
+      pill.style.background = 'var(--accent-light)'; pill.style.color = 'var(--accent)';
+    } else if (type === 'error') {
+      pill.style.background = '#fef2f2'; pill.style.color = 'var(--danger)';
+    } else {
+      pill.style.background = '#f0f0f0'; pill.style.color = 'var(--muted)';
+    }
+  }
+
+  function retryConnection() {
+    const btn = document.getElementById('lock-retry-btn');
+    btn.textContent = '↻ Retrying...';
+    btn.disabled = true;
+    checkLockScreenConnection().then(() => {
+      btn.textContent = '↻ Retry';
+      btn.disabled = false;
+    });
+  }
+
+  // Check connection as soon as page loads
+  checkLockScreenConnection();
 
   // ── PASSWORD ─────────────────────────────────
   async function unlock() {
