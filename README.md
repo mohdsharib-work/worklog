@@ -1,4 +1,4 @@
-# 📋 Work Log – Mohd Sharib - Version 1.2.9
+# 📋 Work Log – Mohd Sharib - Version 1.3.2
 
 A clean, minimal personal work tracker connected to **Google Sheets**. Log daily hours, office/remote status, and work updates — accessible from any device.
 
