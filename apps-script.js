@@ -1,10 +1,14 @@
+// =============================================
+// WORK LOG - Google Apps Script Backend
+// =============================================
+
 const SHEET_NAME = "Sheet1";
 const CONFIG_SHEET_NAME = "Config";
 
 function doGet(e) {
   const action = e.parameter.action;
   if (action === "getAll") return getAll();
-  if (action === "checkPassword") return checkPassword(e.parameter.password);
+  if (action === "checkPassword") return checkPassword(e.parameter.password, e.parameter.type);
   return respond({ error: "Unknown action" });
 }
 
@@ -12,16 +16,17 @@ function doPost(e) {
   const data = JSON.parse(e.postData.contents);
   const action = data.action;
   if (action === "add") return addEntry(data.entry);
-  if (action === "delete") return deleteEntry(data.id);
   return respond({ error: "Unknown action" });
 }
 
-// Password
-function checkPassword(inputPassword) {
+// Password check — type: "lock" (B1) or "entry" (B2)
+function checkPassword(inputPassword, type) {
   try {
     const config = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG_SHEET_NAME);
     if (!config) return respond({ success: false, error: "Config sheet not found" });
-    const storedPassword = config.getRange("B1").getValue().toString().trim();
+    // B1 = lock password, B2 = entry password
+    const cell = (type === "entry") ? "B2" : "B1";
+    const storedPassword = config.getRange(cell).getValue().toString().trim();
     return respond({ success: inputPassword.trim() === storedPassword });
   } catch (e) {
     return respond({ success: false, error: e.message });
@@ -85,6 +90,7 @@ function addEntry(entry) {
   sheet.getRange(lastRow, 5).setNumberFormat('@');
   return respond({ success: true });
 }
+
 
 function respond(data) {
   return ContentService
