@@ -409,6 +409,7 @@
           <span style="font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;">🔒 Only for Sharib</span>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span style="font-size:0.72rem;color:var(--muted);" id="form-toggle-hint">click to collapse</span>
           <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;transform:rotate(180deg);">▲</span>
         </div>
       </div>
@@ -546,17 +547,16 @@
     initApp();
   }
 
-  // Auto-clear any stale non-URL localStorage keys that cause connection issues
-  // Keep only the unlock timer — remove everything else that might cause stale state
-  const keysToKeep = ['worklog_unlocked_until'];
-  Object.keys(localStorage).forEach(k => {
-    if (!keysToKeep.includes(k)) localStorage.removeItem(k);
-  });
-
   // Check if still unlocked within 24 hours
   const unlockedUntil = localStorage.getItem('worklog_unlocked_until');
-  if (unlockedUntil && Date.now() < parseInt(unlockedUntil)) {
+  const isAutoUnlocked = unlockedUntil && Date.now() < parseInt(unlockedUntil);
+
+  if (isAutoUnlocked) {
+    // Skip lock screen entirely — go straight to app and connect
     showApp();
+  } else {
+    // Show lock screen and check connection in background
+    checkLockScreenConnection();
   }
 
   // ── APP INIT ──────────────────────────────────
@@ -592,17 +592,27 @@
     return { decimal: total / 60, label: m > 0 ? `${h}h ${m}m` : `${h}h` };
   }
 
-  async function loadEntries() {
+  async function loadEntries(retryCount = 0) {
     if (!scriptUrl) return;
+    setStatus('loading', 'Connecting...');
     try {
-      const res = await fetch(`${scriptUrl}?action=getAll`);
+      const res = await fetch(`${scriptUrl}?action=getAll&t=${Date.now()}`);
       const data = await res.json();
       entries = data.entries || [];
       setStatus('connected', 'Connected to Google Sheets ✓');
+      const lm = document.getElementById('loading-msg');
+      if (lm) lm.style.display = 'none';
       render();
     } catch (err) {
-      setStatus('disconnected', 'Connection failed – check your URL');
-      document.getElementById('loading-msg').textContent = 'Could not load entries. Check your Apps Script URL.';
+      if (retryCount < 2) {
+        // Auto-retry up to 2 times with a short delay
+        setTimeout(() => loadEntries(retryCount + 1), 1500);
+        setStatus('loading', `Retrying... (${retryCount + 1}/2)`);
+      } else {
+        setStatus('disconnected', 'Connection failed – click ↻ Retry');
+        const lm = document.getElementById('loading-msg');
+        if (lm) { lm.textContent = 'Could not connect. Click ↻ Retry.'; lm.style.display = 'block'; }
+      }
     }
   }
 
@@ -761,6 +771,7 @@
     const hint = document.getElementById('form-toggle-hint');
     const collapsed = body.classList.toggle('collapsed');
     chevron.style.transform = collapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+    hint.textContent = collapsed ? 'click to expand' : 'click to collapse';
   }
 </script>
 </body>
