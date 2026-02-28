@@ -1,5 +1,3 @@
-🔗 [https://mohdsharib-work.github.io/worklog](https://mohdsharib-work.github.io/worklog/)
-
 # 📋 Work Log – Mohd Sharib
 
 A clean, minimal personal work tracker connected to **Google Sheets**. Log daily hours, office/remote status, and work updates — accessible from any device.
@@ -31,8 +29,11 @@ A clean, minimal personal work tracker connected to **Google Sheets**. Log daily
 9. Click **🔒 Lock** in the top right to lock the app manually
 
 ---
+
 ## 🚀 Live Site
-🔗 [https://mohdsharib-work.github.io/worklog](https://mohdsharib-work.github.io/worklog/)
+
+- 🔗 [https://mohdsharib-work.github.io/worklog](https://mohdsharib-work.github.io/worklog/)
+
 ---
 
 ## 🛠️ Setup
