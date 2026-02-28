@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- © WORKLOG APPLICATION BY MOHD SHARIB -->
+<!-- VERSION - 1.7.1 LTS -->
+<!-- APPS-SCRIPT.JS - VERSION 5-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,9 +24,9 @@
     --remote: #6d28d9;
     --remote-light: #ede9fe;
     --danger: #dc2626;
-    --access: #aa1a00;
     --header-bg: #1c2b3a;
     --header-text: #ffffff;
+    --access: #aa1a00;
   }
 
   body {
@@ -34,7 +37,6 @@
     min-height: 100vh;
   }
 
-  /* ── PASSWORD SCREEN ───────────────────── */
   #lock-screen {
     display: flex;
     align-items: center;
@@ -55,10 +57,7 @@
     box-shadow: 0 8px 40px rgba(28,43,58,0.12);
   }
 
-  .lock-icon {
-    font-size: 2.2rem;
-    margin-bottom: 1rem;
-  }
+  .lock-icon { font-size: 2.2rem; margin-bottom: 1rem; }
 
   .lock-card h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -123,16 +122,15 @@
     margin-top: 0.6rem;
     min-height: 1.2em;
   }
-  #app {
-    display: none;
-    padding: 0 0 4rem;
-  }
+
+  #app { display: none; padding: 0 0 4rem; }
 
   header {
     background: var(--header-bg);
     padding: 1.2rem 2rem;
     margin-bottom: 2rem;
   }
+
   .header-inner {
     max-width: 760px;
     margin: 0 auto;
@@ -153,45 +151,6 @@
   header span { font-size: 0.83rem; color: rgba(255,255,255,0.55); letter-spacing: 0.06em; text-transform: uppercase; }
 
   .container { max-width: 760px; margin: 0 auto; padding: 0 1.25rem; }
-
-  .setup-banner {
-    background: #fffbeb;
-    border: 1.5px solid #f59e0b;
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-    color: #92400e;
-    line-height: 1.6;
-  }
-
-  .setup-banner strong { font-weight: 500; display: block; margin-bottom: 0.3rem; }
-
-  .setup-banner input {
-    margin-top: 0.6rem;
-    width: 100%;
-    border: 1.5px solid #f59e0b;
-    border-radius: 7px;
-    padding: 0.5rem 0.75rem;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.93rem;
-    background: #fffdf5;
-    color: var(--text);
-    outline: none;
-  }
-
-  .setup-banner button {
-    margin-top: 0.5rem;
-    padding: 0.5rem 1.2rem;
-    background: #f59e0b;
-    color: #fff;
-    border: none;
-    border-radius: 7px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.93rem;
-    cursor: pointer;
-    font-weight: 500;
-  }
 
   .status-pill {
     display: inline-flex;
@@ -221,6 +180,7 @@
 
   .monthly-card h2 { font-size: 0.87rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
   .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+
   .nav-btn {
     background: none; border: 1.5px solid var(--border); border-radius: 7px;
     width: 28px; height: 28px; cursor: pointer; color: var(--muted);
@@ -332,13 +292,11 @@
   .entry-duration { font-weight: 500; color: var(--accent); font-size: 0.89rem; }
   .entry-notes { font-size: 0.95rem; color: #555; line-height: 1.5; margin-top: 0.35rem; }
 
-
-
   .empty { text-align: center; padding: 2.5rem; color: var(--muted); font-size: 1rem; border: 1.5px dashed var(--border); border-radius: 10px; }
   .spinner { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.97rem; }
 
   .lock-btn {
-    font-size: 0.89rem; color: var(--office); background: none; border: 1.5px solid var(--border);
+    font-size: 0.89rem; color: var(--muted); background: none; border: 1.5px solid var(--border);
     border-radius: 20px; padding: 0.25rem 0.75rem; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
     transition: all 0.15s;
   }
@@ -360,6 +318,10 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.success { background: #16a34a; }
   .toast.error { background: var(--danger); }
+
+  .entries-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .entries-month-nav { display: flex; align-items: center; gap: 0.5rem; }
+
   .modal-overlay {
     display: none;
     position: fixed;
@@ -393,8 +355,7 @@
     width: 100%; padding: 0.7rem 1rem; border: 1.5px solid var(--border);
     border-radius: 8px; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--bg); color: var(--text); text-align: center;
-    outline: none; transition: border-color 0.15s;
-    margin-bottom: 0.75rem;
+    outline: none; transition: border-color 0.15s; margin-bottom: 0.75rem;
   }
   .modal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
   .modal-input.error { border-color: var(--danger); animation: shake 0.3s ease; }
@@ -403,8 +364,7 @@
   .modal-btn-cancel {
     padding: 0.65rem; border: 1.5px solid var(--border); border-radius: 8px;
     background: none; color: var(--muted); cursor: pointer;
-    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem;
-    transition: all 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; transition: all 0.15s;
   }
   .modal-btn-cancel:hover { border-color: var(--text); color: var(--text); }
   .modal-btn-confirm {
@@ -420,32 +380,31 @@
 <body>
 <div id="lock-screen">
   <div class="lock-card">
-    <div class="lock-icon">🔒</div>
+    <div class="lock-icon">📒</div>
     <h1>Work Log</h1>
-    <p class="subtitle">Mohd Sharib — Enter password to continue</p>
+    <p class="subtitle">Mohd Sharib<br>Enter password to continue</p>
 
-    <!-- Connection status on lock screen -->
-    <div id="lock-conn-status" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.2rem;flex-wrap:wrap;">
       <div style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.72rem;padding:0.25rem 0.65rem;border-radius:20px;background:#f0f0f0;color:#888580;" id="lock-status-pill">
         <div id="lock-status-dot" style="width:6px;height:6px;border-radius:50%;background:currentColor;"></div>
         <span id="lock-status-text">Checking connection...</span>
       </div>
-      <button onclick="retryConnection()" id="lock-retry-btn" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;">↻ Retry</button>
+      <button onclick="retryConnection()" id="lock-retry-btn" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.15s;">↻ Retry</button>
     </div>
 
-    <input type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') unlock()" id="password-input">
+    <input type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') unlock()">
     <button class="btn-unlock" id="btn-unlock" onclick="unlock()">Unlock</button>
     <div class="lock-error" id="lock-error"></div>
   </div>
 </div>
 
-
 <div class="toast" id="toast"></div>
+
 <div class="modal-overlay" id="submit-modal">
   <div class="modal-card">
     <div class="modal-icon">🔐</div>
     <div class="modal-title">Confirm to Save</div>
-    <div class="modal-sub">Enter your <strong>entry password</strong> to save</div>
+    <div class="modal-sub">Enter your <strong>Passcode</strong> to save</div>
     <input class="modal-input" type="password" id="modal-password" placeholder="Enter password"
            onkeydown="if(event.key==='Enter') confirmSave(); if(event.key==='Escape') closeModal();">
     <div class="modal-error" id="modal-error"></div>
@@ -455,14 +414,14 @@
     </div>
   </div>
 </div>
-<div id="app">
 
+<div id="app">
   <header>
     <div class="header-inner">
-      <div style="display:flex;align-items:center;gap:1rem;">
-        <div>
-          <h1>Work Log</h1>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.15rem;font-family:'Outfit',sans-serif;font-weight:300;letter-spacing:0.04em;">MOHD SHARIB &nbsp;·&nbsp; <span style="color:rgba(255,255,255,0.35);font-size:0.68rem;">v1.6.1</span></div>
+      <div>
+        <h1>Work Log</h1>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.15rem;font-weight:300;letter-spacing:0.04em;">
+          MOHD SHARIB &nbsp;·&nbsp; <span style="color:rgba(255,255,255,0.35);font-size:0.68rem;">V.1.7.1</span>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:0.75rem;">
@@ -473,13 +432,15 @@
   </header>
 
   <div class="container">
+
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem;">
       <div class="status-pill loading" id="status-pill" style="margin-bottom:0;">
         <div class="status-dot"></div>
         <span id="status-text">Connecting...</span>
       </div>
-      <button onclick="loadEntries()" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;">↻ Retry</button>
+      <button onclick="loadEntries()" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">↻ Retry</button>
     </div>
+
     <div class="section-title">Analytics</div>
     <div class="monthly-card">
       <div class="month-nav">
@@ -494,43 +455,53 @@
         <div class="stat"><div class="val" id="stat-remote">0</div><div class="label">Remote</div></div>
       </div>
     </div>
+
     <div class="section-title">Log Entry</div>
-    <div class="add-card" id="add-card">
+    <div class="add-card">
       <div class="add-card-header" onclick="toggleForm()">
         <div style="display:flex;flex-direction:column;gap:0.2rem;">
           <h2 style="margin-bottom:0;">🔒 Only for Sharib</h2>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
-          <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;transform:rotate(180deg);">▲</span>
+          <span style="font-size:0.72rem;color:var(--muted);" id="form-toggle-hint">click to expand</span>
+          <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;transform:rotate(0deg);">▲</span>
         </div>
       </div>
       <div id="add-form-body" class="collapsed">
-      <div class="form-row">
-        <div>
-          <label>Date</label>
-          <input type="date" id="inp-date">
-        </div>
-        <div>
-          <label>Location</label>
-          <div class="location-toggle">
-            <button class="location-btn active-office" id="btn-office" onclick="setLocation('office')">🏢 Office</button>
-            <button class="location-btn" id="btn-remote" onclick="setLocation('remote')">🏠 Remote</button>
+        <div class="form-row">
+          <div>
+            <label>Date</label>
+            <input type="date" id="inp-date">
+          </div>
+          <div>
+            <label>Location</label>
+            <div class="location-toggle">
+              <button class="location-btn active-office" id="btn-office" onclick="setLocation('office')">🏢 Office</button>
+              <button class="location-btn" id="btn-remote" onclick="setLocation('remote')">🏠 Remote</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-row three">
-        <div><label>Start Time</label><input type="time" id="inp-start"></div>
-        <div><label>End Time</label><input type="time" id="inp-end"></div>
-        <div><label>Break (mins)</label><input type="text" id="inp-break" placeholder="e.g. 60"></div>
-      </div>
-      <div>
-        <label>Work Updates / Notes</label>
-        <textarea id="inp-notes" placeholder="What did you work on today?"></textarea>
-      </div>
-      <button class="btn-add" id="btn-add" onclick="addEntry()">+ Add Entry</button>
+        <div class="form-row three">
+          <div><label>Start Time</label><input type="time" id="inp-start"></div>
+          <div><label>End Time</label><input type="time" id="inp-end"></div>
+          <div><label>Break (mins)</label><input type="text" id="inp-break" placeholder="e.g. 60"></div>
+        </div>
+        <div>
+          <label>Work Updates / Notes</label>
+          <textarea id="inp-notes" placeholder="What did you work on today?"></textarea>
+        </div>
+        <button class="btn-add" id="btn-add" onclick="addEntry()">+ Add Entry</button>
       </div>
     </div>
-    <div class="section-title">All Entries</div>
+
+    <div class="entries-header">
+      <div class="section-title" style="margin-bottom:0;">Entries</div>
+      <div class="entries-month-nav">
+        <button class="nav-btn" onclick="changeEntriesMonth(-1)">&#8592;</button>
+        <span id="entries-month-label" style="font-size:0.88rem;font-weight:500;color:var(--text);min-width:130px;text-align:center;"></span>
+        <button class="nav-btn" id="btn-entries-next" onclick="changeEntriesMonth(1)">&#8594;</button>
+      </div>
+    </div>
     <div class="entry-list" id="entry-list">
       <div class="spinner" id="loading-msg">Loading entries...</div>
     </div>
@@ -568,7 +539,7 @@
     } else if (type === 'error') {
       pill.style.background = '#fef2f2'; pill.style.color = 'var(--danger)';
     } else {
-      pill.style.background = '#f0f0f0'; pill.style.color = 'var(--muted)';
+      pill.style.background = '#f0f0f0'; pill.style.color = '#888580';
     }
   }
 
@@ -581,6 +552,7 @@
       btn.disabled = false;
     });
   }
+
   async function unlock() {
     const input = document.getElementById('password-input');
     const errEl = document.getElementById('lock-error');
@@ -593,7 +565,7 @@
     errEl.textContent = '';
 
     try {
-      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&type=entry&t=${Date.now()}`);
+      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&type=lock&t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('worklog_unlocked_until', Date.now() + 24 * 60 * 60 * 1000);
@@ -628,16 +600,12 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    localStorage.removeItem('worklog_script_url');
-    localStorage.removeItem('worklog_conn');
-
     const unlockedUntil = localStorage.getItem('worklog_unlocked_until');
     const isAutoUnlocked = unlockedUntil && Date.now() < parseInt(unlockedUntil);
-
     if (isAutoUnlocked) {
-      showApp(); 
+      showApp();
     } else {
-      checkLockScreenConnection(); 
+      checkLockScreenConnection();
     }
   });
 
@@ -645,9 +613,9 @@
     document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('inp-start').value = '09:00';
     document.getElementById('inp-end').value = '17:00';
-    updateMonthLabel();
     document.getElementById('week-label').textContent = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-
+    updateMonthLabel();
+    updateEntriesMonthLabel();
     setStatus('loading', 'Connecting...');
     loadEntries();
   }
@@ -677,9 +645,10 @@
     if (!scriptUrl) return;
     setStatus('loading', 'Connecting...');
     try {
-      const res = await fetch(`${scriptUrl}?action=getAll&t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetch(`${scriptUrl}?action=getAll&t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
       entries = data.entries || [];
+      entries.sort((a, b) => new Date(b.date) - new Date(a.date));
       setStatus('connected', 'Connected to Google Sheets ✓');
       const lm = document.getElementById('loading-msg');
       if (lm) lm.style.display = 'none';
@@ -696,7 +665,7 @@
     }
   }
 
-  let pendingEntry = null; 
+  let pendingEntry = null;
 
   function addEntry() {
     const date = document.getElementById('inp-date').value;
@@ -705,7 +674,6 @@
     const brk = document.getElementById('inp-break').value;
     const notes = document.getElementById('inp-notes').value.trim();
     if (!date) { showToast('Please select a date.', 'error'); return; }
-    if (!scriptUrl) { showToast('Not connected to Google Sheets.', 'error'); return; }
 
     const hours = calcHours(start, end, brk);
     pendingEntry = { id: Date.now(), date, location: selectedLocation, start, end, break: brk, hours, notes };
@@ -729,7 +697,6 @@
     const btn = document.getElementById('modal-confirm-btn');
 
     if (!password) { errEl.textContent = 'Please enter your password.'; return; }
-
     btn.disabled = true;
     btn.textContent = 'Verifying...';
     errEl.textContent = '';
@@ -749,10 +716,26 @@
         btn.textContent = 'Save Entry';
         return;
       }
+
       btn.textContent = 'Saving...';
-      await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'add', entry: pendingEntry }) });
+      const saveRes = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'add', entry: pendingEntry })
+      });
+      const saveData = await saveRes.json();
+
+      if (!saveData.success) {
+        errEl.textContent = '⚠️ Save failed. Try again.';
+        btn.disabled = false;
+        btn.textContent = 'Save Entry';
+        return;
+      }
+
       entries.unshift(pendingEntry);
+      entries.sort((a, b) => new Date(b.date) - new Date(a.date));
       document.getElementById('inp-notes').value = '';
+      document.getElementById('inp-break').value = '';
       render();
       closeModal();
       showToast('Entry saved successfully! ✓', 'success');
@@ -764,12 +747,10 @@
     }
   }
 
-
-
   let viewMonthOffset = 0;
+  let entriesMonthOffset = 0;
 
   function changeMonth(dir) {
-    const now = new Date();
     const newOffset = viewMonthOffset + dir;
     if (newOffset > 0) return;
     viewMonthOffset = newOffset;
@@ -777,59 +758,60 @@
     renderStats();
   }
 
+  function changeEntriesMonth(dir) {
+    const newOffset = entriesMonthOffset + dir;
+    if (newOffset > 0) return;
+    entriesMonthOffset = newOffset;
+    updateEntriesMonthLabel();
+    renderEntries();
+  }
+
   function updateMonthLabel() {
     const now = new Date();
     const d = new Date(now.getFullYear(), now.getMonth() + viewMonthOffset, 1);
     document.getElementById('month-name').textContent = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-
     document.getElementById('btn-next-month').disabled = viewMonthOffset === 0;
   }
 
-  function getMonthRange() {
+  function updateEntriesMonthLabel() {
+    const now = new Date();
+    const d = new Date(now.getFullYear(), now.getMonth() + entriesMonthOffset, 1);
+    document.getElementById('entries-month-label').textContent = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    document.getElementById('btn-entries-next').disabled = entriesMonthOffset === 0;
+  }
+
+  function getMonthRange(offset) {
     const now = new Date();
     const y = now.getFullYear();
-    const m = now.getMonth() + viewMonthOffset;
-    return {
-      start: new Date(y, m, 1),
-      end: new Date(y, m + 1, 0, 23, 59, 59)
-    };
+    const m = now.getMonth() + offset;
+    return { start: new Date(y, m, 1), end: new Date(y, m + 1, 0, 23, 59, 59) };
   }
 
   function normalizeEntry(e) {
-    if (e.date) {
-      let d = null;
-      if (typeof e.date === 'string' && e.date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        d = null; // no change needed
-      } else {
-        const parsed = new Date(e.date);
-        if (!isNaN(parsed.getTime())) {
-          const yr = parsed.getFullYear();
-          const mo = String(parsed.getMonth() + 1).padStart(2, '0');
-          const dy = String(parsed.getDate()).padStart(2, '0');
-          e.date = yr + '-' + mo + '-' + dy;
-        }
+    if (e.date && !(typeof e.date === 'string' && e.date.match(/^\d{4}-\d{2}-\d{2}$/))) {
+      const parsed = new Date(e.date);
+      if (!isNaN(parsed.getTime())) {
+        e.date = parsed.getFullYear() + '-' +
+          String(parsed.getMonth() + 1).padStart(2, '0') + '-' +
+          String(parsed.getDate()).padStart(2, '0');
       }
     }
     if (e.hours && typeof e.hours === 'string') {
-      try { e.hours = JSON.parse(e.hours); } catch(err) { e.hours = null; }
+      try { e.hours = JSON.parse(e.hours); } catch(_) { e.hours = null; }
     }
-    if (e.start && typeof e.start !== 'string') {
-      const t = new Date(e.start);
-      if (!isNaN(t.getTime())) {
-        e.start = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-      } else { e.start = ''; }
-    }
-    if (e.end && typeof e.end !== 'string') {
-      const t = new Date(e.end);
-      if (!isNaN(t.getTime())) {
-        e.end = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-      } else { e.end = ''; }
-    }
+    ['start', 'end'].forEach(key => {
+      if (e[key] && typeof e[key] !== 'string') {
+        const t = new Date(e[key]);
+        e[key] = !isNaN(t.getTime())
+          ? String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0')
+          : '';
+      }
+    });
     return e;
   }
 
   function renderStats() {
-    const { start, end } = getMonthRange();
+    const { start, end } = getMonthRange(viewMonthOffset);
     const thisMonth = entries.filter(e => { const d = new Date(e.date + 'T12:00:00'); return d >= start && d <= end; });
     const totalH = thisMonth.reduce((s, e) => s + (e.hours?.decimal || 0), 0);
     document.getElementById('stat-days').textContent = thisMonth.length;
@@ -838,16 +820,21 @@
     document.getElementById('stat-remote').textContent = thisMonth.filter(e => e.location === 'remote').length;
   }
 
-  function render() {
+  function renderEntries() {
     const list = document.getElementById('entry-list');
-    entries = entries.map(normalizeEntry);
-
-    renderStats();
+    const { start, end } = getMonthRange(entriesMonthOffset);
+    const monthEntries = entries.filter(e => {
+      const d = new Date(e.date + 'T12:00:00');
+      return d >= start && d <= end;
+    });
 
     list.innerHTML = '';
-    if (entries.length === 0) { list.innerHTML = '<div class="empty">No entries yet. Log your first day above!</div>'; return; }
+    if (monthEntries.length === 0) {
+      list.innerHTML = '<div class="empty">No entries for this month.</div>';
+      return;
+    }
 
-    entries.forEach(e => {
+    monthEntries.forEach(e => {
       const d = new Date(e.date + 'T12:00:00');
       const el = document.createElement('div');
       el.className = 'entry';
@@ -864,10 +851,17 @@
           </div>
           ${e.notes ? `<div class="entry-notes">${e.notes.toString().replace(/\n/g, '<br>')}</div>` : ''}
         </div>
-`;
+      `;
       list.appendChild(el);
     });
   }
+
+  function render() {
+    entries = entries.map(normalizeEntry);
+    renderStats();
+    renderEntries();
+  }
+
   function showToast(msg, type = 'default') {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -876,13 +870,16 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
+
   function toggleForm() {
     const body = document.getElementById('add-form-body');
     const chevron = document.getElementById('form-chevron');
     const hint = document.getElementById('form-toggle-hint');
-    const collapsed = body.classList.toggle('collapsed');
-    chevron.style.transform = collapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+    const isNowCollapsed = body.classList.toggle('collapsed');
+    chevron.style.transform = isNowCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+    hint.textContent = isNowCollapsed ? 'click to expand' : 'click to collapse';
   }
 </script>
+<!-- © WORKLOG APPLICATION BY MOHD SHARIB -->
 </body>
 </html>
