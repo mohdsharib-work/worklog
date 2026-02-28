@@ -23,7 +23,6 @@ A clean, minimal **dark-themed** personal work tracker to log daily working hour
 
 🔗 [https://mohdsharib-work.github.io/worklog](https://mohdsharib-work.github.io/worklog/)
 
-> Replace `YOUR-USERNAME` with your GitHub username after deployment.
 
 ---
 ## 📱 Usage
