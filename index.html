@@ -458,7 +458,7 @@
   async function checkLockScreenConnection() {
     setLockStatus('checking', 'Checking connection...');
     try {
-      const res = await fetch(scriptUrl + '?action=getAll');
+      const res = await fetch(scriptUrl + '?action=getAll&t=' + Date.now());
       const data = await res.json();
       if (data.entries !== undefined) {
         setLockStatus('connected', 'Server connected ✓');
@@ -495,9 +495,6 @@
     });
   }
 
-  // Check connection as soon as page loads
-  checkLockScreenConnection();
-
   // ── PASSWORD ─────────────────────────────────
   async function unlock() {
     const input = document.getElementById('password-input');
@@ -511,11 +508,9 @@
     errEl.textContent = '';
 
     try {
-      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}`);
+      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&t=${Date.now()}`);
       const data = await res.json();
-
       if (data.success) {
-        // Save unlock time — expires after 24 hours
         localStorage.setItem('worklog_unlocked_until', Date.now() + 24 * 60 * 60 * 1000);
         showApp();
       } else {
@@ -528,7 +523,6 @@
     } catch (err) {
       errEl.textContent = '⚠️ Could not connect. Check your setup.';
     }
-
     btn.disabled = false;
     btn.textContent = 'Unlock';
   }
@@ -539,6 +533,7 @@
     document.getElementById('lock-screen').style.display = 'flex';
     document.getElementById('password-input').value = '';
     document.getElementById('lock-error').textContent = '';
+    checkLockScreenConnection();
   }
 
   function showApp() {
@@ -547,16 +542,14 @@
     initApp();
   }
 
-  // Check if still unlocked within 24 hours
+  // ── STARTUP: decide whether to show lock screen or app ──
   const unlockedUntil = localStorage.getItem('worklog_unlocked_until');
   const isAutoUnlocked = unlockedUntil && Date.now() < parseInt(unlockedUntil);
 
   if (isAutoUnlocked) {
-    // Skip lock screen entirely — go straight to app and connect
-    showApp();
+    showApp(); // go straight to app, initApp will call loadEntries
   } else {
-    // Show lock screen and check connection in background
-    checkLockScreenConnection();
+    checkLockScreenConnection(); // only check connection when showing lock screen
   }
 
   // ── APP INIT ──────────────────────────────────
