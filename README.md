@@ -19,6 +19,20 @@ A clean, minimal personal work tracker connected to **Google Sheets**. Log daily
 
 ---
 
+## 📱 Usage
+
+1. Open the page — connection status shows on the lock screen
+2. Enter your **password** → click **Unlock**
+3. Click **"Log a Day"** header to expand the form *(labelled 🔒 Only for Sharib)*
+4. Pick the **date** and toggle **🏢 Office** or **🏠 Remote**
+5. Enter **start time**, **end time**, and **break** in minutes
+6. Write your **work updates/notes**
+7. Click **+ Add Entry** — saves instantly to Google Sheets
+8. View all entries below — monthly summary updates automatically
+9. Click **🔒 Lock** in the top right to lock the app manually
+
+---
+
 ## 🛠️ Setup
 
 ### 1 – Google Sheet
@@ -79,17 +93,3 @@ const scriptUrl = 'YOUR_WEB_APP_URL';
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) © 2026 Mohd Sharib.
-
----
-
-## 📱 Usage
-
-1. Open the page — connection status shows on the lock screen
-2. Enter your **password** → click **Unlock**
-3. Click **"Log a Day"** header to expand the form *(labelled 🔒 Only for Sharib)*
-4. Pick the **date** and toggle **🏢 Office** or **🏠 Remote**
-5. Enter **start time**, **end time**, and **break** in minutes
-6. Write your **work updates/notes**
-7. Click **+ Add Entry** — saves instantly to Google Sheets
-8. View all entries below — monthly summary updates automatically
-9. Click **🔒 Lock** in the top right to lock the app manually
