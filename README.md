@@ -6,7 +6,6 @@ A clean, minimal **dark-themed** personal work tracker to log daily working hour
 
 ## ✨ Features
 
-- **🌑 Dark theme** – Sleek dark UI with mint green accents and subtle glows
 - **🔒 Password protected** – Secure login screen with 24-hour session memory per browser
 - **🔌 Connection status on login screen** – See if server is connected before entering password
 - **↻ Retry button** – Reconnect instantly on both lock screen and main page
@@ -22,7 +21,7 @@ A clean, minimal **dark-themed** personal work tracker to log daily working hour
 
 ## 🚀 Live Site
 
-🔗 [https://YOUR-USERNAME.github.io/work-log](https://YOUR-USERNAME.github.io/work-log)
+🔗 [https://mohdsharib-work.github.io/worklog](https://mohdsharib-work.github.io/worklog/)
 
 > Replace `YOUR-USERNAME` with your GitHub username after deployment.
 
