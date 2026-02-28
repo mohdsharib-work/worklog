@@ -4,29 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work Log – Mohd Sharib</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #f7f6f3;
-    --surface: #ffffff;
-    --border: #e8e5e0;
-    --text: #1a1917;
-    --muted: #888580;
-    --accent: #2a6049;
-    --accent-light: #e8f2ed;
-    --office: #3b6ea5;
-    --office-light: #e8eef6;
-    --remote: #7a5c9e;
-    --remote-light: #f0ebf8;
-    --danger: #c0392b;
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e8e6f0;
+    --muted: #6b6880;
+    --accent: #4ade9a;
+    --accent-light: #0d2a1f;
+    --office: #60a5fa;
+    --office-light: #0d1e35;
+    --remote: #c084fc;
+    --remote-light: #1e0d35;
+    --danger: #f87171;
   }
 
   body {
     font-family: 'DM Sans', sans-serif;
     font-weight: 300;
     background: var(--bg);
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(74,222,154,0.03) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, rgba(96,165,250,0.03) 0%, transparent 60%);
     color: var(--text);
     min-height: 100vh;
   }
@@ -48,7 +50,7 @@
     width: 100%;
     max-width: 360px;
     text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
   }
 
   .lock-icon {
@@ -57,7 +59,7 @@
   }
 
   .lock-card h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Syne', sans-serif;
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 0.3rem;
@@ -78,7 +80,7 @@
     font-size: 1rem;
     font-weight: 300;
     color: var(--text);
-    background: var(--bg);
+    background: #0f1117;
     outline: none;
     text-align: center;
     letter-spacing: 0.15em;
@@ -98,8 +100,8 @@
   .btn-unlock {
     width: 100%;
     padding: 0.75rem;
-    background: var(--text);
-    color: #fff;
+    background: var(--accent);
+    color: #0f1117;
     border: none;
     border-radius: 9px;
     font-family: 'DM Sans', sans-serif;
@@ -132,12 +134,12 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    border-bottom: 1.5px solid var(--border);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 1.25rem;
   }
 
   header h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Syne', sans-serif;
     font-size: 2rem;
     font-weight: 400;
     letter-spacing: -0.5px;
@@ -148,13 +150,13 @@
   .container { max-width: 760px; margin: 0 auto; }
 
   .setup-banner {
-    background: #fffbeb;
+    background: #1f1a0d;
     border: 1.5px solid #f59e0b;
     border-radius: 10px;
     padding: 1rem 1.25rem;
     margin-bottom: 1.5rem;
     font-size: 0.84rem;
-    color: #92400e;
+    color: #fbbf24;
     line-height: 1.6;
   }
 
@@ -168,7 +170,7 @@
     padding: 0.5rem 0.75rem;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.82rem;
-    background: #fffdf5;
+    background: #0f1117;
     color: var(--text);
     outline: none;
   }
@@ -224,7 +226,7 @@
   .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 
   .stat { text-align: center; }
-  .stat .val { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--text); line-height: 1; }
+  .stat .val { font-family: 'Syne', sans-serif; font-size: 1.8rem; color: var(--text); line-height: 1; }
   .stat .label { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
   .add-card {
@@ -235,7 +237,18 @@
     margin-bottom: 1.5rem;
   }
 
-  .add-card h2 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.2rem; }
+  .add-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 1.2rem;
+    user-select: none;
+  }
+  .add-card-header:hover span { color: var(--text) !important; }
+  .add-card h2 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
+  #add-form-body { overflow: hidden; transition: all 0.3s ease; }
+  #add-form-body.collapsed { display: none; }
 
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
   .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
@@ -251,12 +264,12 @@
     font-size: 0.88rem;
     font-weight: 300;
     color: var(--text);
-    background: var(--bg);
+    background: #0f1117;
     outline: none;
     transition: border-color 0.15s;
   }
 
-  input:focus, textarea:focus { border-color: var(--accent); }
+  input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74,222,154,0.1); }
   textarea { resize: vertical; min-height: 72px; }
 
   .location-toggle { display: flex; gap: 0.5rem; }
@@ -273,7 +286,7 @@
 
   .btn-add {
     width: 100%; margin-top: 0.75rem; padding: 0.75rem;
-    background: var(--text); color: #fff; border: none; border-radius: 8px;
+    background: var(--accent); color: #0f1117; border: none; border-radius: 8px;
     font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 400;
     cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s;
   }
@@ -294,7 +307,7 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
 
   .entry-date { text-align: center; min-width: 38px; }
-  .entry-date .day { font-family: 'DM Serif Display', serif; font-size: 1.4rem; line-height: 1; }
+  .entry-date .day { font-family: 'Syne', sans-serif; font-size: 1.4rem; line-height: 1; }
   .entry-date .mon { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
   .entry-top { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.3rem; }
@@ -394,8 +407,18 @@
     </div>
 
     <!-- Add Entry -->
-    <div class="add-card">
-      <h2>Log a Day</h2>
+    <div class="add-card" id="add-card">
+      <div class="add-card-header" onclick="toggleForm()">
+        <div style="display:flex;flex-direction:column;gap:0.2rem;">
+          <h2 style="margin-bottom:0;">Log a Day</h2>
+          <span style="font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;">🔒 Only for Sharib</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span style="font-size:0.72rem;color:var(--muted);" id="form-toggle-hint">click to collapse</span>
+          <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;">▲</span>
+        </div>
+      </div>
+      <div id="add-form-body">
       <div class="form-row">
         <div>
           <label>Date</label>
@@ -419,6 +442,7 @@
         <textarea id="inp-notes" placeholder="What did you work on today?"></textarea>
       </div>
       <button class="btn-add" id="btn-add" onclick="addEntry()">+ Add Entry</button>
+      </div><!-- end add-form-body -->
     </div>
 
     <!-- Entries -->
@@ -729,6 +753,16 @@
         </div>`;
       list.appendChild(el);
     });
+  }
+
+  // ── FORM TOGGLE ──────────────────────────────
+  function toggleForm() {
+    const body = document.getElementById('add-form-body');
+    const chevron = document.getElementById('form-chevron');
+    const hint = document.getElementById('form-toggle-hint');
+    const collapsed = body.classList.toggle('collapsed');
+    chevron.style.transform = collapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+    hint.textContent = collapsed ? 'click to expand' : 'click to collapse';
   }
 </script>
 </body>
