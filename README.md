@@ -1,39 +1,43 @@
 # 📋 Work Log – Mohd Sharib
 
-A clean, minimal personal work tracker to log daily working hours, office/remote status, and work updates. Data is stored in **Google Sheets** and accessible from any device.
+A clean, minimal **dark-themed** personal work tracker to log daily working hours, office/remote status, and work updates. Data is stored in **Google Sheets** and accessible from any device.
 
 ---
 
 ## ✨ Features
 
+- **🌑 Dark theme** – Sleek dark UI with mint green accents and subtle glows
 - **🔒 Password protected** – Secure login screen with 24-hour session memory per browser
 - **🔌 Connection status on login screen** – See if server is connected before entering password
+- **↻ Retry button** – Reconnect instantly on both lock screen and main page
 - **Log daily hours** – Start time, end time, break duration, auto-calculated total
 - **Office / Remote toggle** – Mark each day as in-office or remote
 - **Work updates & notes** – Write what you worked on each day
 - **Monthly summary** – Total days, hours worked, office days, and remote days for the current month
+- **🔒 Only for Sharib** – Log form is clearly labelled and collapsible so managers can view without accidentally editing
 - **Google Sheets backend** – All entries sync automatically and persist across devices
-- **↻ Retry button** – Reconnect instantly without refreshing the page
 - **Works on any device** – Open via GitHub Pages on phone, laptop, or anywhere
 
-
 ---
+
 ## 🚀 Live Site
 
-🔗 [https://mohdsharib-work.github.io/worklog/](https://mohdsharib-work.github.io/worklog/)
+🔗 [https://YOUR-USERNAME.github.io/work-log](https://YOUR-USERNAME.github.io/work-log)
+
+> Replace `YOUR-USERNAME` with your GitHub username after deployment.
 
 ---
-
 ## 📱 Usage
 
 1. Open the page — connection status shows automatically on the lock screen
 2. Enter your **password** → click **Unlock**
-3. Select the **date** and toggle **🏢 Office** or **🏠 Remote**
-4. Enter **start time**, **end time**, and **break duration** (in minutes)
-5. Write your **work updates / notes**
-6. Click **+ Add Entry** — saves instantly to Google Sheets
-7. **Monthly Summary** at the top updates automatically
-8. Click **🔒 Lock** in the top right to lock the app manually
+3. The **"Log a Day"** form is labelled **🔒 Only for Sharib** — click the header to collapse/expand it
+4. Select the **date** and toggle **🏢 Office** or **🏠 Remote**
+5. Enter **start time**, **end time**, and **break duration** (in minutes)
+6. Write your **work updates / notes**
+7. Click **+ Add Entry** — saves instantly to Google Sheets
+8. **Monthly Summary** at the top updates automatically
+9. Click **🔒 Lock** in the top right to lock the app manually
 
 ---
 
@@ -57,19 +61,10 @@ A clean, minimal personal work tracker to log daily working hours, office/remote
 | NaN instead of date | Delete old entries and re-add them through the app |
 | Connection failed after redeployment | Update the `scriptUrl` in `index.html` with the new URL |
 | No auth popup in Apps Script | Add a dummy function, run it, then authorize |
+| Form not visible | Click the "Log a Day" header to expand it |
 
 ---
 
-## 📁 File Structure
-
-```
-work-log/
-├── index.html        # Main work log page
-├── apps-script.js    # Google Apps Script backend code
-└── README.md         # This file
-
----
-```
 ## 🛠️ Setup Guide
 
 ### Step 1 – Create your Google Sheet
@@ -149,6 +144,16 @@ Replace it with your actual Web App URL.
 6. Click **Save** — your site will be live in ~1 minute at:
    `https://YOUR-USERNAME.github.io/REPO-NAME`
 
+---
+
+## 📁 File Structure
+
+```
+work-log/
+├── index.html        # Main work log page
+├── apps-script.js    # Google Apps Script backend code
+└── README.md         # This file
+```
 
 ---
 
