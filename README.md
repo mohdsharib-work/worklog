@@ -1,4 +1,4 @@
-# 📋 Work Log – Mohd Sharib - Version 1.5.1
+# 📋 Work Log – Mohd Sharib - Version 1.7.1
 
 A clean, minimal personal work tracker connected to **Google Sheets**. Log daily hours, office/remote status, and work updates — accessible from any device.
 
@@ -9,12 +9,14 @@ A clean, minimal personal work tracker connected to **Google Sheets**. Log daily
 
 ## ✨ Features
 
-- 🔒 Password protected with 24-hour session memory
+- 🔒 **Two-layer password protection** — separate lock password & entry save password
+- 🔌 Connection status on login screen with auto-retry
 - 📊 Monthly summary — days, hours, office vs remote count
 - 🏢 Office / 🏠 Remote toggle per day
 - ⏱ Auto-calculates working hours minus break
 - 📝 Work notes/updates per entry
-- 🔌 Connection status on login screen with retry button
+- 🔐 Password modal on every entry save
+- 🍞 Toast notifications — no ugly popups
 - 📱 Works on any device via GitHub Pages
 
 ---
@@ -22,14 +24,16 @@ A clean, minimal personal work tracker connected to **Google Sheets**. Log daily
 ## 📱 Usage
 
 1. Open the page — connection status shows on the lock screen
-2. Enter your **password** → click **Unlock**
-3. Click **"Log a Day"** header to expand the form *(labelled 🔒 Only for Sharib)*
+2. Enter your **lock password** → click **Unlock**
+3. Click **"Log a Day"** header to expand the form *(🔒 Only for Sharib)*
 4. Pick the **date** and toggle **🏢 Office** or **🏠 Remote**
 5. Enter **start time**, **end time**, and **break** in minutes
 6. Write your **work updates/notes**
-7. Click **+ Add Entry** — saves instantly to Google Sheets
-8. View all entries below — monthly summary updates automatically
-9. Click **🔒 Lock** in the top right to lock the app manually
+7. Click **+ Add Entry** → password modal appears
+8. Enter your **entry password** → click **Save Entry**
+9. Entry saves to Google Sheets, green toast confirms ✅
+10. Monthly summary updates automatically
+11. Click **🔒 Lock** in the top right to lock the app manually
 
 ---
 
@@ -42,7 +46,10 @@ A clean, minimal personal work tracker connected to **Google Sheets**. Log daily
 
 | A | B |
 |---|---|
-| Password | YourPassword |
+| Password | YourLockPassword |
+| EntryPassword | YourEntryPassword |
+
+> **B1** = app lock password &nbsp;|&nbsp; **B2** = entry save password
 
 ### 2 – Apps Script
 - Go to **Extensions → Apps Script**
@@ -67,10 +74,16 @@ const scriptUrl = 'YOUR_WEB_APP_URL';
 
 ---
 
-## 🔒 Password
+## 🔒 Password System
 
-- Stored in **Config sheet cell B1** — change anytime, no redeployment needed
-- Session stays unlocked for **24 hours** per browser
+| Password | Stored In | Purpose |
+|---|---|---|
+| Lock Password | Config sheet **B1** | Opens the app |
+| Entry Password | Config sheet **B2** | Confirms every new entry save |
+
+- Change either password anytime by editing the Config sheet — no redeployment needed
+- Lock session stays active for **24 hours** per browser
+- Entry password is required **every time** — no session memory
 
 ---
 
@@ -78,18 +91,28 @@ const scriptUrl = 'YOUR_WEB_APP_URL';
 
 | Issue | Fix |
 |---|---|
-| Not connected | Click **↻ Retry** |
-| Password fails | Check cell B1 — case-sensitive |
+| Not connected | Click **↻ Retry** on lock screen |
+| Lock password fails | Check Config sheet B1 — case-sensitive |
+| Entry password fails | Check Config sheet B2 — case-sensitive |
 | Config not found | Tab must be named exactly `Config` |
 | NaN date on entries | Delete old rows, re-enter through app |
-| No auth popup | Run a function manually in Apps Script |
+| Changes not reflected | Redeploy as New Version in Apps Script |
 
 ---
 
-**Author: Mohd Sharib**
+## 📁 File Structure
+
+```
+work-log/
+├── index.html        # Main work log page
+├── apps-script.js    # Google Apps Script backend
+├── README.md         # This file
+└── LICENSE           # MIT License
+```
 
 ---
 
 ## 📄 License
-
 This project is licensed under the [MIT License](LICENSE) © 2026 Mohd Sharib.
+
+**Author: Mohd Sharib**
