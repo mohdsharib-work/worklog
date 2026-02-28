@@ -21,6 +21,7 @@
     --remote: #6d28d9;
     --remote-light: #ede9fe;
     --danger: #dc2626;
+    --access: #aa1a00;
     --header-bg: #1c2b3a;
     --header-text: #ffffff;
   }
@@ -122,8 +123,6 @@
     margin-top: 0.6rem;
     min-height: 1.2em;
   }
-
-  /* ── MAIN APP ──────────────────────────── */
   #app {
     display: none;
     padding: 0 0 4rem;
@@ -239,7 +238,7 @@
 
   .add-card {
     background: var(--surface);
-    border: none;
+    border: 0.1px solid var(--access);
     border-radius: 10px;
     padding: 1.5rem 1.75rem;
     margin-bottom: 1.5rem;
@@ -339,7 +338,7 @@
   .spinner { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.97rem; }
 
   .lock-btn {
-    font-size: 0.89rem; color: var(--muted); background: none; border: 1.5px solid var(--border);
+    font-size: 0.89rem; color: var(--office); background: none; border: 1.5px solid var(--border);
     border-radius: 20px; padding: 0.25rem 0.75rem; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
     transition: all 0.15s;
   }
@@ -350,11 +349,75 @@
     .form-row, .form-row.three { grid-template-columns: 1fr; }
     header h1 { font-size: 1.65rem; }
   }
+
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: #fff; padding: 0.7rem 1.4rem;
+    border-radius: 30px; font-size: 0.88rem; font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18); opacity: 0;
+    transition: all 0.3s ease; pointer-events: none; z-index: 2000; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #16a34a; }
+  .toast.error { background: var(--danger); }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(28,43,58,0.55);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-card {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 2rem 1.75rem 1.75rem;
+    width: 100%;
+    max-width: 340px;
+    box-shadow: 0 12px 48px rgba(28,43,58,0.2);
+    text-align: center;
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.93) translateY(10px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .modal-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .modal-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+  .modal-sub { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .modal-input {
+    width: 100%; padding: 0.7rem 1rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg); color: var(--text); text-align: center;
+    outline: none; transition: border-color 0.15s;
+    margin-bottom: 0.75rem;
+  }
+  .modal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+  .modal-input.error { border-color: var(--danger); animation: shake 0.3s ease; }
+  .modal-error { font-size: 0.8rem; color: var(--danger); min-height: 1.2rem; margin-bottom: 0.75rem; }
+  .modal-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .modal-btn-cancel {
+    padding: 0.65rem; border: 1.5px solid var(--border); border-radius: 8px;
+    background: none; color: var(--muted); cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .modal-btn-cancel:hover { border-color: var(--text); color: var(--text); }
+  .modal-btn-confirm {
+    padding: 0.65rem; border: none; border-radius: 8px;
+    background: var(--accent); color: #fff; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    transition: opacity 0.15s;
+  }
+  .modal-btn-confirm:hover { opacity: 0.85; }
+  .modal-btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 </head>
 <body>
-
-<!-- ── LOCK SCREEN ───────── -->
 <div id="lock-screen">
   <div class="lock-card">
     <div class="lock-icon">🔒</div>
@@ -376,7 +439,22 @@
   </div>
 </div>
 
-<!-- ── MAIN APP ───────── -->
+
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal-card">
+    <div class="modal-icon">🔐</div>
+    <div class="modal-title">Confirm to Save</div>
+    <div class="modal-sub">Enter your <strong>entry password</strong> to save</div>
+    <input class="modal-input" type="password" id="modal-password" placeholder="Enter password"
+           onkeydown="if(event.key==='Enter') confirmSave(); if(event.key==='Escape') closeModal();">
+    <div class="modal-error" id="modal-error"></div>
+    <div class="modal-btn-row">
+      <button class="modal-btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn-confirm" id="modal-confirm-btn" onclick="confirmSave()">Save Entry</button>
+    </div>
+  </div>
+</div>
 <div id="app">
 
   <header>
@@ -384,7 +462,7 @@
       <div style="display:flex;align-items:center;gap:1rem;">
         <div>
           <h1>Work Log</h1>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.15rem;font-family:'Outfit',sans-serif;font-weight:300;letter-spacing:0.04em;">MOHD SHARIB &nbsp;·&nbsp; <span style="color:rgba(255,255,255,0.35);font-size:0.68rem;">V.1.5.1</span></div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.15rem;font-family:'Outfit',sans-serif;font-weight:300;letter-spacing:0.04em;">MOHD SHARIB &nbsp;·&nbsp; <span style="color:rgba(255,255,255,0.35);font-size:0.68rem;">v1.6.1</span></div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:0.75rem;">
@@ -395,8 +473,6 @@
   </header>
 
   <div class="container">
-
-    <!-- Status -->
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem;">
       <div class="status-pill loading" id="status-pill" style="margin-bottom:0;">
         <div class="status-dot"></div>
@@ -404,8 +480,6 @@
       </div>
       <button onclick="loadEntries()" style="font-size:0.72rem;color:var(--muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:0.25rem 0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;">↻ Retry</button>
     </div>
-
-    <!-- Monthly Summary -->
     <div class="section-title">Analytics</div>
     <div class="monthly-card">
       <div class="month-nav">
@@ -420,14 +494,11 @@
         <div class="stat"><div class="val" id="stat-remote">0</div><div class="label">Remote</div></div>
       </div>
     </div>
-
-    <!-- Add Entry -->
     <div class="section-title">Log Entry</div>
     <div class="add-card" id="add-card">
       <div class="add-card-header" onclick="toggleForm()">
         <div style="display:flex;flex-direction:column;gap:0.2rem;">
-          <h2 style="margin-bottom:0;"></h2>
-          <span style="font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;">🔒 Only for Sharib</span>
+          <h2 style="margin-bottom:0;">🔒 Only for Sharib</h2>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
           <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;transform:rotate(180deg);">▲</span>
@@ -459,7 +530,6 @@
       <button class="btn-add" id="btn-add" onclick="addEntry()">+ Add Entry</button>
       </div>
     </div>
-
     <div class="section-title">All Entries</div>
     <div class="entry-list" id="entry-list">
       <div class="spinner" id="loading-msg">Loading entries...</div>
@@ -472,6 +542,7 @@
   const scriptUrl = 'https://script.google.com/macros/s/AKfycbx4s4Rp15B0l4Q2Q9SJLKsOSN6m7jnNoJtUrfAMbvoszEV9ahkVbKQIB-oRZnBVYOWxrw/exec';
   let entries = [];
   let selectedLocation = 'office';
+
   async function checkLockScreenConnection() {
     setLockStatus('checking', 'Checking connection...');
     try {
@@ -510,7 +581,6 @@
       btn.disabled = false;
     });
   }
-
   async function unlock() {
     const input = document.getElementById('password-input');
     const errEl = document.getElementById('lock-error');
@@ -523,7 +593,7 @@
     errEl.textContent = '';
 
     try {
-      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&t=${Date.now()}`);
+      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&type=entry&t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('worklog_unlocked_until', Date.now() + 24 * 60 * 60 * 1000);
@@ -570,6 +640,7 @@
       checkLockScreenConnection(); 
     }
   });
+
   function initApp() {
     document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('inp-start').value = '09:00';
@@ -615,7 +686,6 @@
       render();
     } catch (err) {
       if (retryCount < 2) {
-        // Auto-retry up to 2 times with a short delay
         setTimeout(() => loadEntries(retryCount + 1), 1500);
         setStatus('loading', `Retrying... (${retryCount + 1}/2)`);
       } else {
@@ -626,29 +696,72 @@
     }
   }
 
-  async function addEntry() {
+  let pendingEntry = null; 
+
+  function addEntry() {
     const date = document.getElementById('inp-date').value;
     const start = document.getElementById('inp-start').value;
     const end = document.getElementById('inp-end').value;
     const brk = document.getElementById('inp-break').value;
     const notes = document.getElementById('inp-notes').value.trim();
-    if (!date) { alert('Please select a date.'); return; }
-    if (!scriptUrl) { alert('Please connect to Google Sheets first.'); return; }
+    if (!date) { showToast('Please select a date.', 'error'); return; }
+    if (!scriptUrl) { showToast('Not connected to Google Sheets.', 'error'); return; }
 
     const hours = calcHours(start, end, brk);
-    const entry = { id: Date.now(), date, location: selectedLocation, start, end, break: brk, hours, notes };
+    pendingEntry = { id: Date.now(), date, location: selectedLocation, start, end, break: brk, hours, notes };
 
-    const btn = document.getElementById('btn-add');
-    btn.disabled = true; btn.textContent = 'Saving...';
+    document.getElementById('submit-modal').classList.add('open');
+    document.getElementById('modal-password').value = '';
+    document.getElementById('modal-error').textContent = '';
+    document.getElementById('modal-confirm-btn').disabled = false;
+    document.getElementById('modal-confirm-btn').textContent = 'Save Entry';
+    setTimeout(() => document.getElementById('modal-password').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('submit-modal').classList.remove('open');
+    pendingEntry = null;
+  }
+
+  async function confirmSave() {
+    const password = document.getElementById('modal-password').value.trim();
+    const errEl = document.getElementById('modal-error');
+    const btn = document.getElementById('modal-confirm-btn');
+
+    if (!password) { errEl.textContent = 'Please enter your password.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    errEl.textContent = '';
 
     try {
-      await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'add', entry }) });
-      entries.unshift(entry);
+      const res = await fetch(`${scriptUrl}?action=checkPassword&password=${encodeURIComponent(password)}&type=entry&t=${Date.now()}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        errEl.textContent = '❌ Wrong password. Try again.';
+        const inp = document.getElementById('modal-password');
+        inp.classList.add('error');
+        setTimeout(() => inp.classList.remove('error'), 400);
+        inp.value = '';
+        inp.focus();
+        btn.disabled = false;
+        btn.textContent = 'Save Entry';
+        return;
+      }
+      btn.textContent = 'Saving...';
+      await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'add', entry: pendingEntry }) });
+      entries.unshift(pendingEntry);
       document.getElementById('inp-notes').value = '';
       render();
-    } catch (err) { alert('Failed to save. Check your connection.'); }
+      closeModal();
+      showToast('Entry saved successfully! ✓', 'success');
 
-    btn.disabled = false; btn.textContent = '+ Add Entry';
+    } catch (err) {
+      errEl.textContent = '⚠️ Connection error. Try again.';
+      btn.disabled = false;
+      btn.textContent = 'Save Entry';
+    }
   }
 
 
@@ -668,6 +781,7 @@
     const now = new Date();
     const d = new Date(now.getFullYear(), now.getMonth() + viewMonthOffset, 1);
     document.getElementById('month-name').textContent = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+
     document.getElementById('btn-next-month').disabled = viewMonthOffset === 0;
   }
 
@@ -682,11 +796,9 @@
   }
 
   function normalizeEntry(e) {
-
     if (e.date) {
       let d = null;
       if (typeof e.date === 'string' && e.date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-
         d = null; // no change needed
       } else {
         const parsed = new Date(e.date);
@@ -701,7 +813,6 @@
     if (e.hours && typeof e.hours === 'string') {
       try { e.hours = JSON.parse(e.hours); } catch(err) { e.hours = null; }
     }
-
     if (e.start && typeof e.start !== 'string') {
       const t = new Date(e.start);
       if (!isNaN(t.getTime())) {
@@ -729,7 +840,6 @@
 
   function render() {
     const list = document.getElementById('entry-list');
-
     entries = entries.map(normalizeEntry);
 
     renderStats();
@@ -758,7 +868,14 @@
       list.appendChild(el);
     });
   }
-
+  function showToast(msg, type = 'default') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type;
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
   function toggleForm() {
     const body = document.getElementById('add-form-body');
     const chevron = document.getElementById('form-chevron');
