@@ -1,7 +1,3 @@
-// =============================================
-// WORK LOG - Google Apps Script Backend
-// =============================================
-
 const SHEET_NAME = "Sheet1";
 const CONFIG_SHEET_NAME = "Config";
 
@@ -88,18 +84,6 @@ function addEntry(entry) {
   sheet.getRange(lastRow, 4).setNumberFormat('@');
   sheet.getRange(lastRow, 5).setNumberFormat('@');
   return respond({ success: true });
-}
-
-function deleteEntry(id) {
-  const sheet = getSheet();
-  const rows = sheet.getDataRange().getValues();
-  for (let i = 1; i < rows.length; i++) {
-    if (String(rows[i][0]) === String(id)) {
-      sheet.deleteRow(i + 1);
-      return respond({ success: true });
-    }
-  }
-  return respond({ error: "Entry not found" });
 }
 
 function respond(data) {
