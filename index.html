@@ -410,10 +410,10 @@
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
           <span style="font-size:0.72rem;color:var(--muted);" id="form-toggle-hint">click to collapse</span>
-          <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;">▲</span>
+          <span id="form-chevron" style="color:var(--muted);font-size:0.9rem;transition:transform 0.25s;transform:rotate(180deg);">▲</span>
         </div>
       </div>
-      <div id="add-form-body">
+      <div id="add-form-body" class="collapsed">
       <div class="form-row">
         <div>
           <label>Date</label>
@@ -546,6 +546,13 @@
     document.getElementById('app').style.display = 'block';
     initApp();
   }
+
+  // Auto-clear any stale non-URL localStorage keys that cause connection issues
+  // Keep only the unlock timer — remove everything else that might cause stale state
+  const keysToKeep = ['worklog_unlocked_until'];
+  Object.keys(localStorage).forEach(k => {
+    if (!keysToKeep.includes(k)) localStorage.removeItem(k);
+  });
 
   // Check if still unlocked within 24 hours
   const unlockedUntil = localStorage.getItem('worklog_unlocked_until');
